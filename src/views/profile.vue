@@ -78,6 +78,7 @@ import { required, email, minLength } from "@vuelidate/validators";
 import { auth } from "@/utils/firebase";
 import { useUserStore } from "@/stores/user";
 import useFileUpload from "@/composables/use-file-upload";
+import { createUser, getUser } from "@/services";
 
 const userStore = useUserStore();
 const { uploadFile } = useFileUpload();
@@ -86,6 +87,8 @@ const isSubmitting = ref(false);
 const isLoading = ref(true);
 const fileInput = ref<HTMLInputElement | null>();
 const files = ref();
+
+const userData = ref();
 
 const profile = reactive({
   email: "elochi238@gmail.com",
@@ -107,6 +110,13 @@ const handleProfileUpdate = async () => {
     await updateProfile(auth.currentUser as User, {
       displayName: profile.displayName,
       photoURL: profile.photoUrl,
+    });
+
+    await createUser({
+      userId: auth.currentUser?.uid as string,
+      displayName: profile.displayName,
+      photoURL: profile.photoUrl,
+      ...userData.value,
     });
   } catch (error) {
     console.log(error);
@@ -134,6 +144,10 @@ onAuthStateChanged(auth, (user) => {
     profile.email = user?.email ?? "";
     profile.displayName = user?.displayName ?? "";
     profile.photoUrl = user?.photoURL ?? "";
+
+    getUser(user.uid).then((response) => {
+      userData.value = response;
+    });
   }
 });
 </script>

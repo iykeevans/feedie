@@ -1,5 +1,12 @@
 import axios, { type AxiosResponse } from "axios";
-import { collection, getDocs, setDoc, doc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  setDoc,
+  doc,
+  addDoc,
+} from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 export interface IRandomUser {
@@ -98,11 +105,13 @@ export const createFeedBack = async (data: {
 // };
 export const createUser = async (data: {
   userId: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+  photoURL?: string;
 }) => {
   try {
-    await setDoc(doc(db, "users", data.userId), { ...data, feedbacks: {} });
+    await setDoc(doc(db, "users", data.userId), { ...data });
   } catch (error) {
     console.log(error);
   }
@@ -120,5 +129,21 @@ export const getUsers = async () => {
     });
 
     return users;
+  } catch (error) {}
+};
+
+export const getUser = async (userId: string) => {
+  try {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      return docSnap.data();
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+      return {};
+    }
   } catch (error) {}
 };

@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "vue3-toastify";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
@@ -75,11 +75,6 @@ const userRules = {
   email: { required, email },
   password: { required, minLength: minLength(8) },
 };
-
-updateProfile(auth.currentUser as any, {
-  displayName: "",
-  photoURL: "",
-});
 
 const v$ = useVuelidate(userRules, user);
 

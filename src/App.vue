@@ -4,11 +4,12 @@
 
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useUserStore } from "@/stores/user";
+import { auth } from "@/utils/firebase";
+// import { useUserStore } from "@/stores/user";
 
-const userStore = useUserStore();
+// const userStore = useUserStore();
 
-const auth = getAuth();
+// const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
@@ -19,7 +20,7 @@ onAuthStateChanged(auth, (user) => {
 
     console.log("----=====>", user);
 
-    userStore.user = { isLoggedIn: true, ...user };
+    // userStore.user = { isLoggedIn: true, ...user };
 
     // login page --> dashboard (share-feedback)
 

@@ -23,7 +23,18 @@
       >
         <div class="flex items-center gap-5 px-5">
           <div class="w-[58px] h-[58px] rounded-full">
-            <img :src="''" alt="" class="rounded-full w-full h-full" />
+            <img
+              :src="user.photoURL"
+              alt=""
+              class="rounded-full w-full h-full"
+              v-if="user.photoURL"
+            />
+            <div
+              class="w-full h-full bg-gray-200 rounded-full text-lg font-semibold text-gray-400 flex items-center justify-center"
+              v-else
+            >
+              {{ user.firstName[0] }}.{{ user.lastName[0] }}
+            </div>
           </div>
 
           <div class="text-xl font-semibold text-[#59636E]">
